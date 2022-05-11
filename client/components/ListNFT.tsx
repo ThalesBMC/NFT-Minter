@@ -10,11 +10,6 @@ export const ListNFT = (props: { nftList: INFTInfo[]; loading: boolean }) => {
   return (
     <div className="w-full p-8 flex flex-col	 items-center justify-center 	  ">
       <div>
-        <h1 className="text-red-600 mb-4">
-          You can copy and paste in your browser to see the object and after
-          that get the image string and paste in your browser to see the image
-        </h1>
-
         {loading && (
           <>
             <div className="flex items-center justify-center ">
