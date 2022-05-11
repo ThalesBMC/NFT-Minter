@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { ethers } from "ethers";
 import { CONTRACT_ADDRESS } from "../utils/constants";
 
-import NFT from "../utils/NFT.json";
+import NFT from "../utils/abi/NFT.json";
 import { INFTInfo } from "../types/INFTInfo";
 import { filterNFTs } from "../utils/filterNFTs";
 import { ListNFT } from "./ListNFT";
@@ -14,7 +14,6 @@ export default function SignMessage() {
   const [loading, setLoading] = useState(false);
   //function to be called when mint occurs
   const nftMinted = () => {
-    alert("NFT MINTED");
     fetchNFTs();
   };
   //Call the signMessage function after submitting the message.
