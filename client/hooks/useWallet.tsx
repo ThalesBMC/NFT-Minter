@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { changeNetwork } from "../utils/changeNetwork";
 declare let window: any;
 
 // Custom hook used to login, logout, return the currentAccount
@@ -30,6 +31,9 @@ export const useWallet = () => {
         method: "eth_requestAccounts",
       });
 
+      //verify network to see if it's ropsten
+
+      await changeNetwork();
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
     } catch (error) {
@@ -40,22 +44,6 @@ export const useWallet = () => {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
-  useEffect(() => {
-    //To verify if the user is in the Ropsten network(id 3)
-    const checkNetwork = async () => {
-      try {
-        if (window.ethereum.networkVersion !== "3") {
-          alert("Please connect to Ropsten!");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    if (currentAccount) {
-      checkNetwork();
-    }
-  }, [currentAccount]);
 
   const disconnect = () => {
     setCurrentAccount("");

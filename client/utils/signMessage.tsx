@@ -36,6 +36,7 @@ export const signMessage = async (props: {
       hashedMessage,
     };
   } catch (err) {
+    setLoading(false);
     console.error(err);
   }
 };
