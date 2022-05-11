@@ -1,15 +1,12 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
+
 import styles from "../styles/Home.module.css";
 import React, { useEffect, useState } from "react";
-import NFT from "../utils/NFT.json";
-import { ethers } from "ethers";
-import { CONTRACT_ADDRESS } from "../utils/constants";
 import SignMessage from "../components/SignMessage";
 declare let window: any;
 const Home: NextPage = () => {
-  const [currentAccount, setCurrentAccount] = useState(null);
+  const [currentAccount, setCurrentAccount] = useState<string>("");
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -61,8 +58,8 @@ const Home: NextPage = () => {
   useEffect(() => {
     const checkNetwork = async () => {
       try {
-        if (window.ethereum.networkVersion !== "4") {
-          alert("Please connect to Rinkeby!");
+        if (window.ethereum.networkVersion !== "3") {
+          alert("Please connect to Ropsten!");
         }
       } catch (error) {
         console.log(error);
@@ -73,33 +70,9 @@ const Home: NextPage = () => {
       checkNetwork();
     }
   }, [currentAccount]);
-  // useEffect(() => {
-  //   /*
-  //    * The function we will call that interacts with out smart contract
-  //    */
-  //   const fetchNFTMetadata = async () => {
-  //     console.log("Checking for Character NFT on address:", currentAccount);
-
-  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //     const signer = provider.getSigner();
-  //     const gameContract = new ethers.Contract(
-  //       CONTRACT_ADDRESS,
-  //       NFT.abi,
-  //       signer
-  //     );
-
-  //     const txn = await gameContract.checkIfUserHasNFT();
-  //   };
-
-  //   /*
-  //    * We only want to run this, if we have a connected wallet
-  //    */
-  //   if (currentAccount) {
-  //     console.log("CurrentAccount:", currentAccount);
-  //     fetchNFTMetadata();
-  //   }
-  // }, [currentAccount]);
-
+  const disconnect = () => {
+    setCurrentAccount("");
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -109,12 +82,12 @@ const Home: NextPage = () => {
       </Head>
 
       <button
-        className="cta-button connect-wallet-button"
-        onClick={connectWalletAction}
+        className="w-96 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+        onClick={currentAccount ? disconnect : connectWalletAction}
       >
-        Connect Wallet To Get Started
+        {currentAccount ? "Disconnect" : "Connect Wallet To Get Started"}
       </button>
-      <SignMessage />
+      {currentAccount && <SignMessage currentAccount={currentAccount} />}
     </div>
   );
 };
