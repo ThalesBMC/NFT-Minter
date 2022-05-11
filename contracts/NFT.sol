@@ -42,7 +42,7 @@ contract NFT is ERC721URIStorage {
         //verify if it's signed by msg.sender
         require(
             isSigned == msg.sender,
-            "User does not have a signature on this message"
+            "msg.sender is not the signer of the message"
         );
 
         string memory finalSvg = string(

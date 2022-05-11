@@ -4,7 +4,7 @@ const main = async () => {
   await domainContract.deployed();
 
   console.log("Contract deployed to:", domainContract.address);
-
+  //hashing for test purpose
   const messageHash = ethers.utils.sha256(
     ethers.utils.defaultAbiCoder.encode(
       ["address", "string"],
@@ -12,18 +12,17 @@ const main = async () => {
     )
   );
   let messageHashBytes = ethers.utils.arrayify(messageHash);
-  console.log(messageHashBytes, "messagehash");
+  console.log(messageHashBytes, "message hashed");
+  //signature for test purpose
   const signature =
     "0xe238f65e99eea26faaa243785dc63b8c9d6abcde497fc5d00a3a541079abd5c05bb1a0a13db790d206ca38a32c3e191b21e4ee76ba4395019a80acb5c0feb6cb1b";
-  console.log(ethers.utils.verifyMessage(messageHashBytes, signature));
+
   let txn = await domainContract.fetchNFTs();
-  console.log(txn);
+  console.log(txn, "nft list");
 
   txn = await domainContract.mintNFT("testtt", messageHashBytes, signature);
 
   await txn.wait();
-  const value = await domainContract.fetchNFTs();
-  console.log("tokenuri", value);
 };
 
 const runMain = async () => {
