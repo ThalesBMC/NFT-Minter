@@ -26,14 +26,13 @@ export const useWallet = () => {
         alert("Get MetaMask!");
         return;
       }
-
+      await changeNetwork();
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
 
       //verify network to see if it's ropsten
 
-      await changeNetwork();
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
     } catch (error) {
