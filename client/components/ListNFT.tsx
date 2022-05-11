@@ -1,6 +1,7 @@
 import React from "react";
 import { INFTInfo } from "../types/INFTInfo";
 
+//shows the loading indicator and all NFTs from the nftList
 export const ListNFT = (props: { nftList: INFTInfo[]; loading: boolean }) => {
   const { nftList, loading } = props;
   return (
@@ -9,6 +10,7 @@ export const ListNFT = (props: { nftList: INFTInfo[]; loading: boolean }) => {
         You can copy and paste in your browser to see the object and after that
         get the image string and paste in your browser to see the image
       </h1>
+
       {loading && (
         <>
           <div className="flex items-center justify-center ">

@@ -17,7 +17,7 @@ export default function SignMessage() {
     alert("NFT MINTED");
     fetchNFTs();
   };
-
+  //Call the signMessage function after submitting the message.
   const handleSign = async (e: any) => {
     e.preventDefault();
 
@@ -28,7 +28,7 @@ export default function SignMessage() {
         setLoading: setLoading,
       });
   };
-
+  //Fetch all minted NFTs from contract
   const fetchNFTs = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
