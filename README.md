@@ -1,15 +1,14 @@
-# Basic Sample Hardhat Project
+# NFT validation Minter
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+This projects demonstrate how to sign a message and validate if this message was signed by the msg.sender and if it was it call a NFT mint function that creates a SVG with the message that you signed.
 
-Try running some of the following tasks:
+<div align="center"  width="140" height="112.43">
+    <img src="./example.svg" width="100" height="100" alt="example" />
+</div>
 
 ```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
+For testing in root folder
 npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
+For running frontend in client folder
+yarn run dev
 ```
