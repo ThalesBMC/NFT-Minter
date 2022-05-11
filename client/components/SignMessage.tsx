@@ -3,54 +3,16 @@ import { ethers } from "ethers";
 import { CONTRACT_ADDRESS } from "../utils/constants";
 
 import NFT from "../utils/NFT.json";
+import { INFTInfo } from "../types/INFTInfo";
+import { filterNFTs } from "../utils/filterNFTs";
+import { ListNFT } from "./ListNFT";
+import { signMessage } from "../utils/signMessage";
 
-declare let window: any;
-
-const signMessage = async (props: { event: () => void; message: string }) => {
-  const { message, event } = props;
-
-  try {
-    if (!window.ethereum)
-      throw new Error("No crypto wallet found. Please install it.");
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    await window.ethereum.send("eth_requestAccounts");
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-
-    const address = await signer.getAddress();
-    const messageHash = ethers.utils.sha256(
-      ethers.utils.defaultAbiCoder.encode(
-        ["address", "string"],
-        [address, message]
-      )
-    );
-    let hashedMessage = ethers.utils.arrayify(messageHash);
-    const signature = await signer.signMessage(hashedMessage);
-    console.log(ethers.utils.verifyMessage(hashedMessage, signature));
-    let nftContract = new ethers.Contract(CONTRACT_ADDRESS, NFT.abi, signer);
-    let txn = await nftContract.mintNFT(message, hashedMessage, signature);
-    nftContract.on("NFTMinted", event);
-
-    await txn.wait();
-    return {
-      message,
-      signature,
-      address,
-      hashedMessage,
-    };
-  } catch (err) {
-    console.error(err);
-  }
-};
-interface INFTInfo {
-  owner: string;
-  tokenUri: string;
-}
-export default function SignMessage(props: { currentAccount: string }) {
+export default function SignMessage() {
   const [nftList, setNFTList] = useState<INFTInfo[]>([]);
   const [messageTyped, setMessageTyped] = useState("");
+  const [loading, setLoading] = useState(false);
+  //function to be called when mint occurs
   const nftMinted = () => {
     alert("NFT MINTED");
     fetchNFTs();
@@ -63,26 +25,16 @@ export default function SignMessage(props: { currentAccount: string }) {
       signMessage({
         event: nftMinted,
         message: messageTyped,
+        setLoading: setLoading,
       });
   };
+
   const fetchNFTs = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     let nftContract = new ethers.Contract(CONTRACT_ADDRESS, NFT.abi, signer);
     let allNFTs = await nftContract.fetchNFTs();
-
-    const itemsFiltered = allNFTs.filter((i: any) => i.tokenUri.length > 5);
-
-    const items = await Promise.all(
-      itemsFiltered.map(async (i: INFTInfo) => {
-        let item = {
-          owner: i.owner,
-          tokenUri: i.tokenUri,
-        };
-
-        return item;
-      })
-    );
+    const items = await filterNFTs(allNFTs);
 
     setNFTList(items);
   };
@@ -121,23 +73,7 @@ export default function SignMessage(props: { currentAccount: string }) {
           </footer>
         </div>
       </form>
-      {true && (
-        <>
-          <h1 className="text-red-600 mb-4">
-            You can copy and paste in your browser to see the object and after
-            that get the image string and paste in your browser to see the image
-          </h1>
-          {nftList.map((nft) => (
-            <>
-              <div className="textarea w-full h-full textarea-bordered mb-4 ">
-                <h1 className="text-teal-500">Owner: {nft.owner}</h1>
-                <h1>NFT DATA:</h1>
-                <h3 className="break-all	 w-full mb-20">{nft.tokenUri}</h3>
-              </div>
-            </>
-          ))}
-        </>
-      )}
+      <ListNFT nftList={nftList} loading={loading} />
     </>
   );
 }

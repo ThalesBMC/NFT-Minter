@@ -1,6 +1,8 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
+//you can run the tests using npx hardhat test
+
 describe("Mint NFT", function () {
   it("Should return an error of 'msg.sender is not the signer of the message'", async function () {
     const NFT = await ethers.getContractFactory("NFT");
