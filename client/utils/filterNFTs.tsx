@@ -1,5 +1,6 @@
 import { INFTInfo } from "../types/INFTInfo";
 
+// function responsible for clearing the nft list that came from the contract
 export const filterNFTs = async (allNFTs: INFTInfo[]) => {
   const itemsFiltered = allNFTs.filter((i: any) => i.tokenUri.length > 5);
 

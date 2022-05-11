@@ -10,6 +10,8 @@ interface IMint {
   signature: string;
   event: () => void;
 }
+
+// function responsible for minting the nft
 export const mintNFT = async (props: IMint) => {
   const { message, hashedMessage, signature, event } = props;
   const provider = new ethers.providers.Web3Provider(window.ethereum);

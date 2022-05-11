@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 
 import { mintNFT } from "./mintNFT";
 
+// function used to encrypt the message and sign and call the mint function
 export const signMessage = async (props: {
   event: () => void;
   message: string;
@@ -15,6 +16,7 @@ export const signMessage = async (props: {
     const signer = provider.getSigner();
 
     const address = await signer.getAddress();
+    //encrypting message
     const messageHash = ethers.utils.sha256(
       ethers.utils.defaultAbiCoder.encode(
         ["address", "string"],
@@ -22,6 +24,7 @@ export const signMessage = async (props: {
       )
     );
     let hashedMessage = ethers.utils.arrayify(messageHash);
+    //signing message
     const signature = await signer.signMessage(hashedMessage);
     //minting NFT
     const loading = await mintNFT({ message, hashedMessage, signature, event });

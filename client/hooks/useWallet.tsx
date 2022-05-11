@@ -1,31 +1,22 @@
 import React, { useState, useEffect } from "react";
 declare let window: any;
+
+// Custom hook used to login, logout, return the currentAccount
+// Also verify the network to see if it's Ropsten
 export const useWallet = () => {
   const [currentAccount, setCurrentAccount] = useState("");
+  //just checking if the wallet is connected
   const checkIfWalletIsConnected = async () => {
-    try {
-      const { ethereum } = window;
+    const { ethereum } = window;
 
-      if (!ethereum) {
-        console.log("Make sure you have MetaMask!");
-        return;
-      } else {
-        console.log("We have the ethereum object", ethereum);
-
-        const accounts = await ethereum.request({ method: "eth_accounts" });
-
-        if (accounts.length !== 0) {
-          const account = accounts[0];
-          console.log("Found an authorized account:", account);
-          setCurrentAccount(account);
-        } else {
-          console.log("No authorized account found");
-        }
-      }
-    } catch (error) {
-      console.log(error);
+    if (!ethereum) {
+      console.log("Make sure you have MetaMask!");
+      return;
+    } else {
+      console.log("We have the ethereum object", ethereum);
     }
   };
+  // Connect function so the user can login in the app
   const connectWalletAction = async () => {
     try {
       const { ethereum } = window;
@@ -50,6 +41,7 @@ export const useWallet = () => {
     checkIfWalletIsConnected();
   }, []);
   useEffect(() => {
+    //To verify if the user is in the Ropsten network(id 3)
     const checkNetwork = async () => {
       try {
         if (window.ethereum.networkVersion !== "3") {
@@ -64,6 +56,7 @@ export const useWallet = () => {
       checkNetwork();
     }
   }, [currentAccount]);
+
   const disconnect = () => {
     setCurrentAccount("");
   };
