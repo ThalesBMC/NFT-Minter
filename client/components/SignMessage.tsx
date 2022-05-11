@@ -34,18 +34,22 @@ export default function SignMessage() {
     let nftContract = new ethers.Contract(CONTRACT_ADDRESS, NFT.abi, signer);
     let allNFTs = await nftContract.fetchNFTs();
     const items = await filterNFTs(allNFTs);
-
-    setNFTList(items);
+    // So the new ones appear at the top
+    setNFTList(items.reverse());
   };
 
   useEffect(() => {
-    fetchNFTs();
+    try {
+      fetchNFTs();
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
   return (
     <>
-      <form className="m-4" onSubmit={handleSign}>
-        <div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white">
+      <form className="m-4 " onSubmit={handleSign}>
+        <div className="credit-card w-6/12	 shadow-lg mx-auto rounded-xl bg-white">
           <main className="mt-4 p-4">
             <h1 className="text-xl font-semibold text-gray-700 text-center">
               Sign messages
