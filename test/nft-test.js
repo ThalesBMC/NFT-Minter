@@ -56,7 +56,8 @@ describe("Verify signer message", function () {
     const signature =
       "0xe238f65e99eea26faaa243785dc63b8c9d6abcde497fc5d00a3a541079abd5c05bb1a0a13db790d206ca38a32c3e191b21e4ee76ba4395019a80acb5c0feb6cb1b";
     // isMessageSigned should return the wallet that signed the message
-    await expect(nft.isMessageSigned(messageHashBytes, signature)).to.equal(
+
+    expect(await nft.isMessageSigned(messageHashBytes, signature)).to.equal(
       "0x830c86883Dd7d2D0fa72074Ff7fcB0c048C58D87"
     );
   });
